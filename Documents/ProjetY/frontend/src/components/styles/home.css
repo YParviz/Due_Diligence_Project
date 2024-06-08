@@ -68,3 +68,6 @@ h1 {
     border-radius: 4px;
     cursor: pointer;
 }
+.selected {
+    background-color: #f0f0f0; /* Couleur de fond pour l'entreprise sélectionnée */
+}

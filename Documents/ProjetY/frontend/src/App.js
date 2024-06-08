@@ -7,7 +7,9 @@ import ForgotPassword from './components/forgotPassword.jsx';
 import UserList from './components/userList.jsx';
 import ValidateUser from './components/ValidateUser.jsx';
 import Home from './components/home.jsx';
-import Documents from './components/Documents.jsx'; // Ensure the casing matches the file name
+import Documents from './components/Documents.jsx'; //
+import CreateCompany from './components/CreateCompany.jsx';
+import Analysis from './components/Analysis.jsx';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
             <Route path='/home' element={<Home />} /> {/* Ajout de cette ligne */}
             <Route path="/validate-user/:userId" element={<ValidateUser />} />
             <Route path="/documents" element={<Documents />} /> {/* Ajoutez la route pour Documents */}
+            <Route path="/create-company" element={<CreateCompany />} />
+            <Route path="/analysis/:id" element={<Analysis />} />
           </Routes>
         </Router>
       </AuthProvider>

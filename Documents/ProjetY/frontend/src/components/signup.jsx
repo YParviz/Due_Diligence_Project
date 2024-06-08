@@ -51,7 +51,7 @@ function Signup() {
             setError("Passwords don't match");
             return;
         }
-        const pwd = CryptoJS.enc.Base64.stringify(CryptoJS.SHA256(userRegister.pwd));
+        const pwd = userRegister.pwd; // Changed to avoid double hashing
         const data = {
             username: userRegister.usr,
             email: userRegister.email,
@@ -59,11 +59,11 @@ function Signup() {
             company: userRegister.company,
         };
         try {
-            const userData = await signup(data); // Signup and get user data
-            const token = userData.token; // Extract token from user data
-            localStorage.setItem('token', token); // Store token in local storage
-            await login({ username: userRegister.usr, password: pwd }); // Login with the same credentials
-            navigate('/projects'); // Redirect to projects page after successful signup and login
+            const userData = await signup(data);
+            const token = userData.token;
+            localStorage.setItem('token', token);
+            await login({ username: userRegister.usr, password: userRegister.pwd }); // Changed to use plain password
+            navigate('/projects');
         } catch (error) {
             if (error.message === 'Username already exists') {
                 setError('Username already exists');
@@ -74,6 +74,7 @@ function Signup() {
             }
         }
     };
+    
     
     
     const togglePasswordVisibility = () => {

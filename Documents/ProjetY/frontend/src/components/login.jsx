@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import User from "../images/user.png";
@@ -13,26 +13,9 @@ function Login() {
     pwd: "",
   });
   const [rememberMe, setRememberMe] = useState(false);
-  const navigate = useNavigate(); // Utilisation du hook useNavigate pour la navigation
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [loginPageLoaded, setLoginPageLoaded] = useState(false);
-
-  useEffect(() => {
-    const fetchLoginPage = async () => {
-      try {
-        await axios.get('http://127.0.0.1:8000/login/');
-        setLoginPageLoaded(true);
-      } catch (error) {
-        console.error('Error loading login page:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLoginPage();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,15 +48,13 @@ function Login() {
   
       // Stockage du token dans le stockage local
       localStorage.setItem('authToken', token);
-      console.log("Token stored:", token); // Vérifiez si le token est correctement stocké dans le localStorage
-    
+  
       // Vérifiez le rôle de l'utilisateur
       const config = {
         headers: {
           Authorization: `Token ${token}`
         }
       };
-      console.log("Request headers:", config.headers); // Vérifiez les headers de la requête
       const userResponse = await axios.get('http://127.0.0.1:8000/api/user/', config);
       const user = userResponse.data;
   
@@ -85,23 +66,15 @@ function Login() {
       }
 
     } catch (error) {
-      // Gestion des erreurs
+      console.error('Login error:', error);
+      setError('Invalid username or password');
     }
   };
-  
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!loginPageLoaded) {
-    return <div>Error loading login page</div>;
-  }
 
   return (
     <div className="loginDiv">
       <form onSubmit={handleSubmit}>
-        <h1 className="welcomeTitle">welcome</h1>
+        <h1 className="welcomeTitle">Welcome</h1>
         {error && <div>{error}</div>}
         <span className="inputWithIcon">
           <input
@@ -146,7 +119,7 @@ function Login() {
 
         <br />
         <div className="buttonGroup">
-          <button>Login</button>
+          <button type="submit">Login</button>
           <Link className="signup" to={"/signup"}>
             Sign up
           </Link>

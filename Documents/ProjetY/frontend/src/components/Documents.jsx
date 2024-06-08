@@ -1,33 +1,48 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './styles/documents.css'; // Assurez-vous de créer et d'importer le fichier CSS
+import './styles/documents.css';
 import searchIcon from '../images/search.jpg';
 import loadingIcon from '../images/loading.jpg';
-import downloadIcon from '../images/download.jpg'; // Suppose you have a download.jpg
+import downloadIcon from '../images/download.jpg';
 
 const Documents = () => {
-    const [companyName, setCompanyName] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { company } = location.state || {};
+    const [document, setDocument] = useState(null);
+
     const [documentStatus, setDocumentStatus] = useState('');
 
     useEffect(() => {
-        async function fetchCompanyData() {
-            try {
-                // Remplacez l'URL par l'URL appropriée pour obtenir les données de l'entreprise
-                const response = await axios.get('http://localhost:8000/api/company-details/');
-                const companyData = response.data;
-                setCompanyName(companyData.name);
-                setDocumentStatus(companyData.documentStatus);
-            } catch (error) {
-                console.error('Error fetching company data:', error);
-            }
+        if (company) {
+            // Fetch the document status if needed
+            axios.get(`http://localhost:8000/api/companies/${company.id}/document-status/`)
+                .then(response => setDocumentStatus(response.data.status))
+                .catch(error => console.error('Error fetching document status:', error));
         }
-        fetchCompanyData();
-    }, []);
+    }, [company]);
 
-    const handleDownload = () => {
-        // Logique pour télécharger les documents
-        console.log('Downloading documents...');
+    const handleFileChange = (event) => {
+        setDocument(event.target.files[0]);
     };
+
+    const handleUpload = () => {
+        if (document && company) {
+            const formData = new FormData();
+            formData.append('document', document);
+            formData.append('company_id', company.id);
+    
+            axios.post('http://localhost:8000/api/companies/upload-document/', formData)
+                .then(response => {
+                    console.log('Document uploaded successfully');
+                    setDocumentStatus('Uploaded');
+                    navigate(`/analysis/${company.id}`); // Redirect to analysis page after upload
+                })
+                .catch(error => console.error('Error uploading document:', error));
+        }
+    };
+    
 
     return (
         <div className="documents-container">
@@ -35,17 +50,19 @@ const Documents = () => {
             <div className="form-container">
                 <div className="form-group">
                     <label>Company name:</label>
-                    <div className="form-input">{companyName}</div>
+                    <div className="form-input">{company?.name}</div>
                 </div>
                 <div className="form-group">
-                    <label>Document status:</label>
+                    <label>Document Status:</label>
                     <div className="form-input">{documentStatus}</div>
                 </div>
+                <div className="form-group">
+                    <label>Upload Document:</label>
+                    <input type="file" onChange={handleFileChange} />
+                </div>
                 <div className="actions">
-                    <img src={searchIcon} alt="Search" className="icon" />
-                    <img src={loadingIcon} alt="Loading" className="icon" />
-                    <button className="download-btn" onClick={handleDownload}>
-                        <img src={downloadIcon} alt="Download" className="icon" /> Download
+                    <button className="upload-btn" onClick={handleUpload}>
+                        <img src={loadingIcon} alt="Upload" className="icon" /> Upload
                     </button>
                 </div>
             </div>

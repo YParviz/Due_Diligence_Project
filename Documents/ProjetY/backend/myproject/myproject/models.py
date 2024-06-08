@@ -38,3 +38,14 @@ class Admin(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    from django.db import models
+
+class Company(models.Model):
+    name = models.CharField(max_length=100)
+    status = models.CharField(max_length=50, default='Pending')
+    address = models.TextField(null=True, blank=True)
+    score = models.IntegerField(null=True, blank=True)
+    accuracy = models.FloatField(null=True, blank=True)
+    risk = models.FloatField(null=True, blank=True)
+    summary = models.TextField(null=True, blank=True)
