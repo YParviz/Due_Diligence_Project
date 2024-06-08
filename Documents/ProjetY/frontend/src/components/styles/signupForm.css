@@ -1,0 +1,64 @@
+.signupForm {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    position: relative;
+}
+
+.signupForm form {
+    width: 60%;
+    max-width: 700px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px; /*Onpeux changer la couleur*/ 
+}
+
+.signupForm .textInput {
+    width: 100%;
+    background-color: #bebebe;
+    border: none;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 0; /* Aucun border radius */
+    padding-left: 40px;
+    margin-bottom: 10px;
+}
+
+.signupForm .buttonContainer {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.signupForm button {
+    width: calc(30% - 5px); /* La largeur de chaque bouton sera la moitié moins 5px pour l'espace entre eux */
+    height: 40px;
+    background-color: var(--btnbg);
+    color: #feeeee;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-top: 2px;
+  margin-left: 40px;
+}
+
+.signupForm button:hover {
+    background-color: var(--btnbghover);
+    color: #000;
+    cursor: pointer;
+}
+.createAccountTitle {
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--bgb); 
+    margin-bottom: 20px;
+}

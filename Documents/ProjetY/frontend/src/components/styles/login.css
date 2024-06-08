@@ -1,0 +1,188 @@
+@import './variables.css';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 0.8rem;
+}
+
+.loginDiv {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.loginDiv form button, .signup {
+    width: 48%; /* Ajuste la largeur des boutons */
+}
+
+.loginDiv form {
+    width: 60%;
+    max-width: 700px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.textInput {
+    width: 100%;
+    background-color: #bebebe;
+    border: none;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 20px;
+    padding-left: 40px;
+    margin-bottom: 10px; /* Ajoute une marge en bas pour l'espacement */
+}
+
+.loginDiv form input {
+    border-radius: 10px;
+    padding-left: 40px;
+}
+
+.inputWithIcon {
+    position: relative;
+}
+
+.inputWithIcon input[type="text"],
+.inputWithIcon input[type="password"],
+.inputWithIcon input[type="email"] {
+    width: 100%;
+    background-color: #bebebe;
+    border: none;
+    height: 40px; /* Ajout de cette ligne */
+    font-size: 16px; /* Ajout de cette ligne */
+    padding-left: 40px;
+}
+
+.inputWithIcon .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+}
+
+.inputWithIcon .eyeIcon {
+    right: 10px; /* Ajuster la position à droite */
+}
+
+.inputWithIcon .cadenaIcon {
+    left: 10px; /* Ajuster la position à gauche */
+}
+
+.inputWithIcon .userIcon {
+    left: 10px; /* Ajuster la position à gauche */
+}
+
+.forgot {
+    display: inline-block;
+    text-align: right;
+    text-decoration: none;
+    font-size: 0.8em;
+    color: rgb(2, 123, 179);
+    font-style: italic;
+    margin-left: 10px; /* Réduisez la marge à gauche */
+}
+
+.options {
+    display: flex;
+    justify-content: flex-start; /* Alignement à gauche */
+    align-items: center;
+    margin-top: 10px;
+    gap: 60px; /* Ajout d'un espace entre les éléments */
+}
+
+.rememberMe {
+    display: flex;
+    align-items: center;
+}
+
+.rememberMe input[type="checkbox"] {
+    width: 16px; /* Taille de la case à cocher */
+    height: 16px; /* Taille de la case à cocher */
+    margin-right: 5px; /* Espace entre la case à cocher et le label */
+    margin-bottom: 4px;
+}
+
+.rememberMe label {
+    margin-left: 5px;
+    margin-bottom: 4px;
+}
+
+.loginDiv form button {
+    width: 25%;
+    height: 40px;
+    background-color: var(--btnbg);
+    color: #feeeee;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-top: 2px;
+    margin-left: 90px; 
+    margin-right: auto; /* Ajout de cette ligne */
+}
+
+.loginDiv form button:hover {
+    background-color: var(--btnbghover);
+    color: #000;
+    cursor: pointer;
+}
+
+.signup {
+    width: 25%;
+    height: 38px;
+    text-align: center;
+    text-decoration: none;
+    margin: 2px 80px 0 0; /* Ajustement de la marge droite */
+    color: rgb(43, 43, 43);
+    font-size: 0.9rem; /* Ajustement de la taille de la police */
+    background-color: #b4c0ce;
+    border-radius: 6px;
+    line-height: 30px;
+}
+
+.signup:hover {
+    color: rgb(2, 123, 179);
+}
+
+/* Pour le titre de la page */
+.welcomeTitle {
+    text-transform: uppercase;
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--bgb); 
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 650px) {
+    .loginDiv form {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .loginDiv form {
+        width: 90%;
+    }
+    .loginDiv form span {
+        width: 80%;
+    }
+    .forgot {
+        width: 80%;
+    }
+}
