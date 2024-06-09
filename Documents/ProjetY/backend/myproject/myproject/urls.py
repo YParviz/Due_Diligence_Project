@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 from rest_framework.authtoken.views import obtain_auth_token
-from .views import create_company, get_companies, get_company, delete_company,upload_document, get_document_status
+from .views import LogoutView, create_company, get_companies, get_company, delete_company,upload_document, get_document_status
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/companies/<int:company_id>/delete/', delete_company, name='delete-company'),  # Nouvelle route pour supprimer une entreprise
      path('api/companies/upload-document/', upload_document, name='upload-document'),
     path('api/companies/<int:company_id>/document-status/', get_document_status, name='get-document-status'),
+        path('api/logout/', LogoutView.as_view(), name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

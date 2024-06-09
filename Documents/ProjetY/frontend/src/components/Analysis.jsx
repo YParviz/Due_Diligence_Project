@@ -19,7 +19,7 @@ const Analysis = () => {
     };
 
     const handleBackClick = () => {
-        navigate('/');
+        navigate('/home');
     };
 
     if (!company) return <div>Loading...</div>;

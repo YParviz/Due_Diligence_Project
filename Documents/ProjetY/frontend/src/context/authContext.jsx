@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
 import axios from 'axios';
 
-export const authContext = createContext();
+export const AuthContext = createContext();
 
 export const useAuth = () => {
-    const context = useContext(authContext);
+    const context = useContext(AuthContext);
     if (!context) throw new Error('There is no AuthProvider');
     return context;
 }
@@ -39,10 +39,11 @@ export function AuthProvider({ children }) {
         setLoading(true);
         try {
             const response = await client.post('login/', data);
-            const token = response.data.token;
-            console.log('Token:', token);
+            const userData = response.data;
+            const token = userData.token;
             localStorage.setItem('token', token);
-            setUser({ logged: true, data: response.data });
+            setUser({ logged: true, data: userData });
+            return userData;  // Ensure that the user data is returned
         } catch (err) {
             console.error('Login error:', err);
             throw new Error('Login failed');
@@ -108,8 +109,8 @@ export function AuthProvider({ children }) {
     const contextValue = { login, logout, user, setUser, signup, resetPassword, deleteUser, loading };
 
     return (
-        <authContext.Provider value={contextValue}>
+        <AuthContext.Provider value={contextValue}>
             {children}
-        </authContext.Provider>
+        </AuthContext.Provider> 
     );
 }

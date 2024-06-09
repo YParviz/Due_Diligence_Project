@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './styles/documents.css';
-import searchIcon from '../images/search.jpg';
 import loadingIcon from '../images/loading.jpg';
-import downloadIcon from '../images/download.jpg';
 
 const Documents = () => {
     const location = useLocation();
@@ -42,7 +40,10 @@ const Documents = () => {
                 .catch(error => console.error('Error uploading document:', error));
         }
     };
-    
+
+    const handleBackClick = () => {
+        navigate('/home');  // Redirection vers la page Home
+    };
 
     return (
         <div className="documents-container">
@@ -64,6 +65,7 @@ const Documents = () => {
                     <button className="upload-btn" onClick={handleUpload}>
                         <img src={loadingIcon} alt="Upload" className="icon" /> Upload
                     </button>
+                    <button className="back-btn" onClick={handleBackClick}>Back</button>
                 </div>
             </div>
         </div>

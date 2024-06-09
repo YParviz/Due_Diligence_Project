@@ -13,6 +13,7 @@ h1 {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    
 }
 
 .company-section label {
@@ -24,6 +25,8 @@ h1 {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 200px; /* Largeur réduite de l'input */
+    margin-right: 10px; /* Espacement entre l'input et le bouton */
 }
 
 .create-company-btn {
@@ -33,6 +36,8 @@ h1 {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-left: auto; /* Aligner le bouton à droite */
+
 }
 
 .company-table table {

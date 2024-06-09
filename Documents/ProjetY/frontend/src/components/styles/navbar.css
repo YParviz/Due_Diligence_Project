@@ -1,0 +1,58 @@
+.header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    z-index: 1000;
+  }
+  
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    height: 70px;
+    margin: 1rem;
+  }
+  
+  .nav__logo {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .nav__list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav__list li {
+    margin-right: 20px;
+  }
+  
+  .nav__link {
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .nav__link:hover {
+    color: #666;
+  }
+  
+  .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Assurez-vous que le z-index est plus élevé que celui du contenu */
+  }
+  
+  .content {
+    padding-top: 60px; /* Ajustez la valeur selon la hauteur de votre Navbar */
+  }
+  

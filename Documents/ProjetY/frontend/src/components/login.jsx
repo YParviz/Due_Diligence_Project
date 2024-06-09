@@ -6,6 +6,7 @@ import Cadena from "../images/cadena.png";
 import EyeIcon from "../images/eye-icon.png";
 import EyeSlashIcon from "../images/eye-slash-icon.png";
 import "./styles/login.css";
+import { useAuth } from "../context/authContext";
 
 function Login() {
   const [userLogin, setUserLogin] = useState({
@@ -16,6 +17,8 @@ function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,28 +46,12 @@ function Login() {
     };
     
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login/', data);
-      const { token } = response.data;
-  
-      // Stockage du token dans le stockage local
-      localStorage.setItem('authToken', token);
-  
-      // Vérifiez le rôle de l'utilisateur
-      const config = {
-        headers: {
-          Authorization: `Token ${token}`
-        }
-      };
-      const userResponse = await axios.get('http://127.0.0.1:8000/api/user/', config);
-      const user = userResponse.data;
-  
-      // Redirection en fonction du rôle de l'utilisateur
-      if (user.isAdmin) {
+      const userData = await login(data);
+      if (userData.isAdmin) {
         navigate("/users");
       } else {
         navigate("/home");
       }
-
     } catch (error) {
       console.error('Login error:', error);
       setError('Invalid username or password');

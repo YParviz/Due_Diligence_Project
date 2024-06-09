@@ -23,7 +23,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from .models import Company
 from rest_framework.parsers import MultiPartParser
-
+from django.contrib.auth import logout
 
 
 def ignore_login(request):
@@ -114,15 +114,19 @@ def login_user(request):
     user = authenticate(username=username, password=password)
 
     if user is not None:
-        # Fetch the user's profile to check validation status
         user_profile = UserProfile.objects.get(user=user)
         if not user_profile.validation.is_validated:
             return Response({'error': 'User not validated'}, status=status.HTTP_400_BAD_REQUEST)
         
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        return Response({
+            'token': token.key,
+            'isAdmin': user.is_superuser,
+            'username': user.username
+        })
     else:
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+
 
     
 @api_view(['GET'])
@@ -228,3 +232,13 @@ def get_document_status(request, company_id):
         return Response({'status': company.status}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            request.user.auth_token.delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
