@@ -51,7 +51,7 @@ function Signup() {
             setError("Passwords don't match");
             return;
         }
-        const pwd = userRegister.pwd; // Changed to avoid double hashing
+        const pwd = userRegister.pwd;
         const data = {
             username: userRegister.usr,
             email: userRegister.email,
@@ -59,24 +59,20 @@ function Signup() {
             company: userRegister.company,
         };
         try {
-            const userData = await signup(data);
-            const token = userData.token;
+            const response = await signup(data);
+            const token = response.data.token;
             localStorage.setItem('token', token);
-            await login({ username: userRegister.usr, password: userRegister.pwd }); // Changed to use plain password
+            await login({ username: userRegister.usr, password: userRegister.pwd });
             navigate('/projects');
         } catch (error) {
-            if (error.message === 'Username already exists') {
-                setError('Username already exists');
-            } else if (error.message === 'Invalid email address') {
-                setError('Invalid email address');
+            if (error.response && error.response.data && error.response.data.error) {
+                setError(error.response.data.error); // Display the specific error message from backend
             } else {
                 setError('Signup failed');
             }
         }
     };
-    
-    
-    
+
     const togglePasswordVisibility = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
     };

@@ -11,14 +11,16 @@ import Documents from './components/Documents.jsx';
 import CreateCompany from './components/CreateCompany.jsx';
 import Analysis from './components/Analysis.jsx';
 import Navbar from './components/navbar.jsx';
-import Contact from './components/contact.jsx'; // Import the Contact component
-import ProtectedRoute from './components/ProtectedRoute.jsx'; // Import the ProtectedRoute component
+import Contact from './components/contact.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import About from './components/About.jsx';
 
 const App = () => {
   return (
     <div className='app'>
       <AuthProvider>
         <Router>
+          <Navbar /> {/* Déplacez la barre de navigation en dehors du composant AppContent */}
           <AppContent />
         </Router>
       </AuthProvider>
@@ -27,30 +29,25 @@ const App = () => {
 }
 
 const AppContent = () => {
-  const location = useLocation();
-  const hideNavbarRoutes = ['/', '/signup', '/forgot-password', '/validate-user/:userId'];
-
   return (
-    <>
-      {!hideNavbarRoutes.some(route => location.pathname.match(new RegExp(`^${route.replace(/:\w+/g, '\\w+')}$`))) && <Navbar />}
-      <div className="content">
-        <Routes>
-          <Route path='/' element={<Login />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Register />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/users' element={<ProtectedRoute><UserList /></ProtectedRoute>} />
-          <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path='/validate-user/:userId' element={<ValidateUser />} />
-          <Route path='/documents' element={<ProtectedRoute><Documents /></ProtectedRoute>} />
-          <Route path='/create-company' element={<ProtectedRoute><CreateCompany /></ProtectedRoute>} />
-          <Route path='/analysis/:id' element={<ProtectedRoute><Analysis /></ProtectedRoute>} />
-          <Route path='/about' element={<div>About Us Content</div>} />
-          <Route path='/contact' element={<Contact />} />
-        </Routes>
-      </div>
-    </>
+    <div className="content">
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Register />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/users' element={<ProtectedRoute><UserList /></ProtectedRoute>} />
+        <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path='/validate-user/:userId' element={<ValidateUser />} />
+        <Route path='/documents' element={<ProtectedRoute><Documents /></ProtectedRoute>} />
+        <Route path='/create-company' element={<ProtectedRoute><CreateCompany /></ProtectedRoute>} />
+        <Route path='/analysis/:id' element={<ProtectedRoute><Analysis /></ProtectedRoute>} />
+        <Route path='/about' element={<About />} />
+        <Route path='/contact' element={<Contact />} />
+      </Routes>
+    </div>
   );
-}
+};
+
 
 export default App;

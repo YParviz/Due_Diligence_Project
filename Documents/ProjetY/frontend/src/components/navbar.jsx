@@ -1,21 +1,30 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import "./styles/navbar.css";
+import Logo from '../images/LogoS4.PNG'; // Assurez-vous que le chemin est correct
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (
     <header className="header">
       <nav className="nav container">
-        <NavLink to="/" className="nav__logo">
-          Navigation Bar
-        </NavLink>
+        <div className="nav__logo">
+          <NavLink to="/login">
+            <img src={Logo} alt="Logo" className="nav__logo-img" />
+          </NavLink>
+        </div>
         <ul className="nav__list">
           <li>
             <NavLink to="/about" className="nav__link">
@@ -40,7 +49,7 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li>
-                <button className="nav__link" onClick={handleLogout}>
+                <button className="nav__link nav__button" onClick={handleLogout}>
                   Logout
                 </button>
               </li>
