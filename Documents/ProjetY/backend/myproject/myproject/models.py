@@ -1,9 +1,8 @@
-
+# models.py
 from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -38,14 +37,20 @@ class Admin(models.Model):
 
     def __str__(self):
         return self.user.username
-    
-    from django.db import models
 
 class Company(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='companies')
     name = models.CharField(max_length=100)
     status = models.CharField(max_length=50, default='Pending')
     address = models.TextField(null=True, blank=True)
-    score = models.IntegerField(null=True, blank=True)
-    accuracy = models.FloatField(null=True, blank=True)
-    risk = models.FloatField(null=True, blank=True)
-    summary = models.TextField(null=True, blank=True)
+    document_status = models.CharField(max_length=50, default='Not Uploaded')  # Nouveau champ
+
+    def __str__(self):
+        return self.name
+
+class Analysis(models.Model):
+    company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='analysis')
+    score = models.IntegerField()
+    accuracy = models.FloatField()
+    risk = models.FloatField()
+    summary = models.TextField()

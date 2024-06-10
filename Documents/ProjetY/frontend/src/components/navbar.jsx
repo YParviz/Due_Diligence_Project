@@ -7,7 +7,7 @@ const Navbar = () => {
   const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    logout(); // Appel de la fonction logout
+    logout();
   };
 
   return (
@@ -17,6 +17,16 @@ const Navbar = () => {
           Navigation Bar
         </NavLink>
         <ul className="nav__list">
+          <li>
+            <NavLink to="/about" className="nav__link">
+              About Us
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/contact" className="nav__link">
+              Contact
+            </NavLink>
+          </li>
           {user.logged && (
             <>
               <li>
@@ -27,11 +37,6 @@ const Navbar = () => {
               <li>
                 <NavLink to="/profile" className="nav__link">
                   Profile
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/about" className="nav__link">
-                  About Us
                 </NavLink>
               </li>
               <li>

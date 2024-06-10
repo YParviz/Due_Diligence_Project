@@ -1,8 +1,8 @@
 import os
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
-from .models import UserProfile, Validation
-from .serializers import CompanySerializer, UserProfileSerializer, ValidationSerializer
+from .models import Analysis, UserProfile, Validation
+from .serializers import AnalysisSerializer, CompanySerializer, UserProfileSerializer, ValidationSerializer
 from rest_framework import status
 from django.contrib.auth.models import User
 
@@ -88,19 +88,14 @@ def register_user(request):
 
         if not all([username, email, password, company]):
             return Response({'error': 'All fields are required'}, status=status.HTTP_400_BAD_REQUEST)
-
         if User.objects.filter(username=username).exists():
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
-
         if User.objects.filter(email=email).exists():
             return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
-
         user = User.objects.create_user(username=username, email=email, password=password)
         user_profile = UserProfile.objects.create(user=user, company=company)
 
-        # Create the validation object for the user profile
         Validation.objects.create(user_profile=user_profile, is_validated=False)
-
         serializer = UserProfileSerializer(instance=user_profile)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
@@ -151,28 +146,54 @@ def get_user(request):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def create_company(request):
     company_name = request.data.get('company')
     if not company_name:
         return Response({'error': 'Company name is required'}, status=status.HTTP_400_BAD_REQUEST)
     
     try:
-        company = Company.objects.create(name=company_name)
+        # Retrieve the user from the request
+        user = request.user
+        
+        # Create a new company associated with the current user
+        company = Company.objects.create(name=company_name, user=user)
+        
+        # Create a corresponding Analysis record for the newly created company
+        analysis = Analysis.objects.create(company=company, score=0, accuracy=0.0, risk=0.0, summary='')
+        
         return Response({'message': 'Company created successfully'}, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_companies(request):
+    user = request.user
+    companies = Company.objects.filter(user=user)
+    serializer = CompanySerializer(companies, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
-def get_companies(request):
-    try:
-        companies = Company.objects.all()
-        serializer = CompanySerializer(companies, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+@permission_classes([IsAuthenticated])
+def get_company_analysis(request, company_id):
+    user = request.user
+    company = get_object_or_404(Company, id=company_id, user=user)
+    analysis = get_object_or_404(Analysis, company=company)
+    serializer = AnalysisSerializer(analysis)
+    return Response(serializer.data)
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_analysis(request, company_id):
+    user = request.user
+    company = get_object_or_404(Company, id=company_id, user=user)
+    analysis = get_object_or_404(Analysis, company=company)
+    serializer = AnalysisSerializer(analysis, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -193,6 +214,7 @@ def delete_company(request, company_id):
         return Response({'message': 'Company deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 
@@ -217,12 +239,14 @@ def upload_document(request):
                 destination.write(chunk)
 
         # Mettez à jour le statut de l'entreprise après le téléchargement du document
-        company.status = 'Document Uploaded'
+        company.status = 'Pending'  # Laissez ce statut à 'Pending' pour l'exemple
+        company.document_status = 'Uploaded'  # Nouveau statut pour les documents
         company.save()
 
         return Response({'message': 'Document uploaded successfully'}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

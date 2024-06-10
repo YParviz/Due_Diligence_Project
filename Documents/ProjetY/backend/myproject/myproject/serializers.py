@@ -1,6 +1,6 @@
+# serializers.py
 from rest_framework import serializers
-from .models import UserProfile, Validation
-from .models import Company
+from .models import UserProfile, Validation, Company, Analysis
 
 class ValidationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,7 +17,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['id', 'username', 'email', 'company', 'validation']
+
+class AnalysisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Analysis
+        fields = '__all__'
+
 class CompanySerializer(serializers.ModelSerializer):
+    analysis = AnalysisSerializer(read_only=True)
+
     class Meta:
         model = Company
         fields = '__all__'

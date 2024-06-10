@@ -1,28 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './styles/analysis.css';  // Assurez-vous de créer ce fichier CSS
+import './styles/analysis.css';
 
 const Analysis = () => {
     const { id } = useParams();
-    const [company, setCompany] = useState(null);
+    const location = useLocation();
+    const [analysis, setAnalysis] = useState(null);
     const navigate = useNavigate();
+    const company = location.state?.company;
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/companies/${id}/`)
-            .then(response => setCompany(response.data))
-            .catch(error => console.error('Error fetching company data:', error));
+        axios.get(`http://localhost:8000/api/companies/${id}/analysis/`, {
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            }
+        })
+        .then(response => setAnalysis(response.data))
+        .catch(error => console.error('Error fetching analysis data:', error));
     }, [id]);
 
     const handleUpdateClick = () => {
-        navigate(`/documents`, { state: { company } });
+        if (company) {
+            navigate(`/documents`, { state: { company } });
+        } else {
+            console.error('Company data not available');
+        }
     };
 
     const handleBackClick = () => {
         navigate('/home');
     };
 
-    if (!company) return <div>Loading...</div>;
+    if (!analysis) return <div>Loading...</div>;
 
     return (
         <div className="analysis-container">
@@ -30,27 +40,27 @@ const Analysis = () => {
             <div className="analysis-details">
                 <div className="detail-item">
                     <label>Company name: </label>
-                    <span>{company.name}</span>
+                    <span>{company?.name || 'Company name not available'}</span>
                 </div>
                 <div className="detail-item">
                     <label>Address: </label>
-                    <span>{company.address}</span>
+                    <span>{company?.address || 'Address not available'}</span>
                 </div>
                 <div className="detail-item">
                     <label>Score: </label>
-                    <span>{company.score}</span>
+                    <span>{analysis.score}</span>
                 </div>
                 <div className="detail-item">
                     <label>Accuracy: </label>
-                    <span>{company.accuracy}</span>
+                    <span>{analysis.accuracy}</span>
                 </div>
                 <div className="detail-item">
                     <label>Risk: </label>
-                    <span>{company.risk}</span>
+                    <span>{analysis.risk}</span>
                 </div>
                 <div className="detail-item">
                     <label>Analysis summary: </label>
-                    <span>{company.summary}</span>
+                    <span>{analysis.summary}</span>
                 </div>
             </div>
             <div className="buttons">

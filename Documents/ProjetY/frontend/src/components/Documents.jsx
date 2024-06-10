@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './styles/documents.css';
-import loadingIcon from '../images/loading.jpg';
 
 const Documents = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { company } = location.state || {};
     const [document, setDocument] = useState(null);
-
     const [documentStatus, setDocumentStatus] = useState('');
 
     useEffect(() => {
@@ -35,7 +33,7 @@ const Documents = () => {
                 .then(response => {
                     console.log('Document uploaded successfully');
                     setDocumentStatus('Uploaded');
-                    navigate(`/analysis/${company.id}`); // Redirect to analysis page after upload
+                    navigate(`/analysis/${company.id}`, { state: { company } }); // Pass the company data to analysis page
                 })
                 .catch(error => console.error('Error uploading document:', error));
         }
@@ -63,7 +61,7 @@ const Documents = () => {
                 </div>
                 <div className="actions">
                     <button className="upload-btn" onClick={handleUpload}>
-                        <img src={loadingIcon} alt="Upload" className="icon" /> Upload
+                    Upload
                     </button>
                     <button className="back-btn" onClick={handleBackClick}>Back</button>
                 </div>

@@ -11,7 +11,13 @@ const CreateCompany = () => {
 
     const handleCreateCompany = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/api/create-company/', { company: companyName });
+            const response = await axios.post('http://localhost:8000/api/create-company/', 
+            { company: companyName }, 
+            {
+                headers: {
+                    'Authorization': `Token ${localStorage.getItem('token')}`
+                }
+            });
             if (response.status === 201) {
                 navigate('/home');  // Redirection après la création réussie
             }
