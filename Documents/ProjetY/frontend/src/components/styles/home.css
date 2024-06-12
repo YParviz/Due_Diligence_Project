@@ -13,7 +13,6 @@ h1 {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-    
 }
 
 .company-section label {
@@ -26,7 +25,6 @@ h1 {
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 200px; /* Largeur réduite de l'input */
-    margin-right: 10px; /* Espacement entre l'input et le bouton */
 }
 
 .create-company-btn {
@@ -37,7 +35,6 @@ h1 {
     border-radius: 4px;
     cursor: pointer;
     margin-left: auto; /* Aligner le bouton à droite */
-
 }
 
 .company-table table {
@@ -65,14 +62,10 @@ h1 {
     margin-left: 10px;
 }
 
-.download-btn {
-    background-color: #6200ea;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.action-btn {
+    margin-right: 10px; /* Ajoute de l'espace entre les boutons */
 }
+
 .selected {
     background-color: #f0f0f0; /* Couleur de fond pour l'entreprise sélectionnée */
 }

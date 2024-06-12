@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/companies/<int:company_id>/delete/', delete_company, name='delete-company'),
     path('api/companies/upload-document/', upload_document, name='upload-document'),
     path('api/companies/<int:company_id>/document-status/', get_document_status, name='get-document-status'),
-    path('api/companies/<int:company_id>/analysis/', get_company_analysis, name='get-company-analysis'),  # Add this line
+    path('api/companies/<int:company_id>/analysis/', get_company_analysis, name='get-company-analysis'),
+path('api/user-details/<int:user_id>/', views.update_user_details, name='update_user_details'), 
     path('api/logout/', LogoutView.as_view(), name='logout'),
 ]

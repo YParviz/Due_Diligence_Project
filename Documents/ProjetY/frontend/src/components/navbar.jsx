@@ -26,16 +26,6 @@ const Navbar = () => {
           </NavLink>
         </div>
         <ul className="nav__list">
-          <li>
-            <NavLink to="/about" className="nav__link">
-              About Us
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/contact" className="nav__link">
-              Contact
-            </NavLink>
-          </li>
           {user.logged && (
             <>
               <li>
@@ -48,12 +38,24 @@ const Navbar = () => {
                   Profile
                 </NavLink>
               </li>
-              <li>
-                <button className="nav__link nav__button" onClick={handleLogout}>
-                  Logout
-                </button>
-              </li>
             </>
+          )}
+          <li>
+            <NavLink to="/about" className="nav__link">
+              About Us
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/contact" className="nav__link">
+              Contact
+            </NavLink>
+          </li>
+          {user.logged && (
+            <li className="nav__list-logout">
+              <button className="nav__link nav__button" onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
           )}
         </ul>
       </nav>

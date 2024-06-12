@@ -54,3 +54,4 @@ class Analysis(models.Model):
     accuracy = models.FloatField()
     risk = models.FloatField()
     summary = models.TextField()
+

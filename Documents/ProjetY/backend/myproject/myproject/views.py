@@ -24,6 +24,7 @@ from rest_framework.permissions import IsAdminUser
 from .models import Company
 from rest_framework.parsers import MultiPartParser
 from django.contrib.auth import logout
+from django.http import HttpResponseBadRequest
 
 
 def ignore_login(request):
@@ -217,7 +218,6 @@ def delete_company(request, company_id):
 
 
 
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def upload_document(request):
@@ -226,6 +226,10 @@ def upload_document(request):
         company = get_object_or_404(Company, id=company_id)
 
         document = request.FILES['document']
+
+        # Vérifiez que le fichier est un PDF
+        if document.content_type != 'application/pdf':
+            return HttpResponseBadRequest("Seuls les fichiers PDF sont acceptés.")
 
         # Définir le chemin de stockage
         upload_dir = os.path.join('media', 'documents', str(company_id))
@@ -266,3 +270,25 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])  # Assurez-vous que seuls les utilisateurs authentifiés peuvent accéder à cette vue
+def update_user_details(request, user_id):
+    try:
+        # Récupérez l'utilisateur à mettre à jour
+        user_profile = get_object_or_404(UserProfile, user_id=user_id)
+
+        # Assurez-vous que l'utilisateur actuel met à jour ses propres détails
+        if request.user != user_profile.user:
+            return Response({'error': 'You do not have permission to update this user\'s details'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Serialisez les données de la demande
+        serializer = UserProfileSerializer(user_profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            # Enregistrez les modifications
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

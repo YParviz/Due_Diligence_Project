@@ -14,6 +14,7 @@ import Navbar from './components/navbar.jsx';
 import Contact from './components/contact.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import About from './components/About.jsx';
+import Profile from './components/profile.jsx';
 
 const App = () => {
   return (
@@ -44,6 +45,7 @@ const AppContent = () => {
         <Route path='/analysis/:id' element={<ProtectedRoute><Analysis /></ProtectedRoute>} />
         <Route path='/about' element={<About />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       </Routes>
     </div>
   );

@@ -6,7 +6,7 @@ import { useAuth } from '../context/authContext';
 
 const Home = () => {
   const [companies, setCompanies] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -56,24 +56,26 @@ const Home = () => {
     }
   };
 
-  const handleSelectCompany = (company) => {
-    setSelectedCompany(company);
+  const handleDownloadDocumentsClick = (company) => {
+    navigate(`/documents`, { state: { company } });
   };
 
-  const handleDownloadDocumentsClick = () => {
-    if (selectedCompany) {
-      navigate(`/documents`, { state: { company: selectedCompany } });
-    } else {
-      alert("Please select a company first.");
-    }
-  };
+  const filteredCompanies = companies.filter(company =>
+    company.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="home-container">
       <h1>Customer</h1>
       <div className="company-section">
         <label htmlFor="company-search">Search for a company</label>
-        <input type="text" id="company-search" placeholder="Company" />
+        <input 
+          type="text" 
+          id="company-search" 
+          placeholder="Company" 
+          value={searchTerm} 
+          onChange={(e) => setSearchTerm(e.target.value)} 
+        />
         <button className="create-company-btn" onClick={handleCreateCompanyClick}>
           Create new company
         </button>
@@ -88,18 +90,21 @@ const Home = () => {
             </tr>
           </thead>
           <tbody>
-            {companies.map((company) => (
-              <tr key={company.id} onClick={() => handleSelectCompany(company)} className={selectedCompany?.id === company.id ? "selected" : ""}>
+            {filteredCompanies.map((company) => (
+              <tr key={company.id}>
                 <td>{company.name}</td>
                 <td>{company.status}</td>
                 <td>
                   {(company.document_status === 'Uploaded') && (
-                    <button onClick={() => viewCompany(company.id, company)}>
+                    <button className="action-btn" onClick={() => viewCompany(company.id, company)}>
                       <img src="../images/eye-icon.png" alt="View" />
                     </button>
                   )}
-                  <button onClick={() => deleteCompany(company.id)}>
+                  <button className="action-btn" onClick={() => deleteCompany(company.id)}>
                     <img src="../images/delete.png" alt="Delete" />
+                  </button>
+                  <button className="action-btn" onClick={() => handleDownloadDocumentsClick(company)}>
+                    Download the documents
                   </button>
                 </td>
               </tr>
@@ -107,9 +112,6 @@ const Home = () => {
           </tbody>
         </table>
       </div>
-      <button className="download-btn" onClick={handleDownloadDocumentsClick}>
-        Download the documents
-      </button>
     </div>
   );
 };

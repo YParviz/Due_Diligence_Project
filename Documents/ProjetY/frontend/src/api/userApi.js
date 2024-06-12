@@ -29,7 +29,6 @@ export async function getUserById(userId) {
     }
 }
 
-// Function to create a new user account
 export async function registerUser(userData) {
     try {
         const response = await api.post('register/', userData);
@@ -39,7 +38,6 @@ export async function registerUser(userData) {
     }
 }
 
-// Function to login and get a token
 export async function loginUser(username, password) {
     try {
         const response = await api.post('login/', {
@@ -48,6 +46,8 @@ export async function loginUser(username, password) {
         });
         const token = response.data.token;
         localStorage.setItem('token', token);
+        // Ajoutez le token dans les en-têtes de l'API axios
+        api.defaults.headers.common['Authorization'] = `Token ${token}`;
         return token;
     } catch (error) {
         console.error('Login error:', error);

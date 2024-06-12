@@ -20,7 +20,13 @@ const Documents = () => {
     }, [company]);
 
     const handleFileChange = (event) => {
-        setDocument(event.target.files[0]);
+        const selectedFile = event.target.files[0];
+        if (selectedFile && selectedFile.type === 'application/pdf') {
+            setDocument(selectedFile);
+        } else {
+            alert('Veuillez télécharger uniquement des fichiers PDF.');
+            setDocument(null);
+        }
     };
 
     const handleUpload = () => {
@@ -28,7 +34,7 @@ const Documents = () => {
             const formData = new FormData();
             formData.append('document', document);
             formData.append('company_id', company.id);
-    
+
             axios.post('http://localhost:8000/api/companies/upload-document/', formData)
                 .then(response => {
                     console.log('Document uploaded successfully');
@@ -57,11 +63,11 @@ const Documents = () => {
                 </div>
                 <div className="form-group">
                     <label>Upload Document:</label>
-                    <input type="file" onChange={handleFileChange} />
+                    <input type="file" onChange={handleFileChange} accept=".pdf" />
                 </div>
                 <div className="actions">
-                    <button className="upload-btn" onClick={handleUpload}>
-                    Upload
+                    <button className="upload-btn" onClick={handleUpload} disabled={!document}>
+                        Upload
                     </button>
                     <button className="back-btn" onClick={handleBackClick}>Back</button>
                 </div>
