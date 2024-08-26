@@ -103,6 +103,29 @@ This is a web application designed for managing company data and document upload
 - **Home**: Displays a list of companies with options to create new companies, view details, or delete.
 - **Documents**: Allows users to upload documents for a selected company.
 - **Analysis**: Displays detailed information and analysis of a selected company.
+- 
+## Screenshots
+
+### Login Page
+![Login Page](Documents/ProjetY/Login.png)
+
+### Admin Page
+![Admin Page](Documents/ProjetY/Admin.png)
+
+### Create an account
+![Create an account](Documents/ProjetY/Connexion.png)
+
+### Customer View
+![Customer View](Documents/ProjetY/Customer.png)
+
+### Document Submission
+![Document Submission](Documents/ProjetY/DépotDocument.png)
+
+### New Company Form
+![New Company Form](Documents/ProjetY/NewCompany.png)
+
+### Request Page
+![Request Page](Documents/ProjetY/Request.png)
 
 
 ## License
