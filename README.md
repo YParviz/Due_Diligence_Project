@@ -127,6 +127,8 @@ This is a web application designed for managing company data and document upload
 ### Request Page
 ![Request Page](Documents/ProjetY/Request.png)
 
+### Analysis Page
+![Request Page](Documents/ProjetY/home.PNG)
 
 ## License
 
