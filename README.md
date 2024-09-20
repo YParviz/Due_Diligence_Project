@@ -32,8 +32,8 @@ This is a web application designed for managing company data and document upload
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/yourusername/your-repository.git
-    cd your-repository
+    git clone https://github.com/YParviz/Due_Diligence_Project.git
+    cd Due_Diligence_Project
     ```
 
 2. **Set up a virtual environment**:
